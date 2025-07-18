@@ -11,6 +11,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
+
         $totalPendingTasks = Task::query()
             ->where('status', 'pending')
             ->count();
@@ -43,6 +44,12 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
         $activeTasks = TaskResource::collection($activeTasks);
+
+        if ($user->role === 'vendor') {
+            return inertia(
+                'VendorUser/Dashboard'
+            );
+        }
         return inertia(
             'Dashboard',
             compact(

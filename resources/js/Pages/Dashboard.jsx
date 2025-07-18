@@ -2,6 +2,12 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link } from "@inertiajs/react";
 
+const capitalizeWords = (str) =>
+  str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
 export default function Dashboard({
   auth,
   totalPendingTasks,
@@ -17,7 +23,7 @@ export default function Dashboard({
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-          Dashboard
+            Hi {capitalizeWords(auth.user.role)} {capitalizeWords(auth.user.name)}
         </h2>
       }
     >

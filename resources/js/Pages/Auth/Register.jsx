@@ -4,6 +4,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import SelectInput from '@/Components/SelectInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
@@ -12,6 +13,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        role: '',
     });
 
     useEffect(() => {
@@ -64,6 +66,23 @@ export default function Register() {
 
                     <InputError message={errors.email} className="mt-2" />
                 </div>
+
+                <div className="mt-4">
+                  <InputLabel htmlFor="role" value="Register as" />
+                  <SelectInput
+                      id="role"
+                      name="role"
+                      value={data.role}
+                      onChange={(e) => setData("role", e.target.value)}
+                      className="mt-1 block w-full"
+                      required
+                  >
+                      <option value="">-- Select Role --</option>
+                      <option value="user">User</option>
+                      <option value="vendor">Vendor</option>
+                  </SelectInput>
+                  <InputError message={errors.role} className="mt-2" />
+              </div>
 
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />

@@ -57,3 +57,4 @@ export default function ConfirmPassword() {
         </GuestLayout>
     );
 }
+ConfirmPassword.layout = (page) => page;

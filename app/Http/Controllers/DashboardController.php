@@ -45,9 +45,14 @@ class DashboardController extends Controller
             ->get();
         $activeTasks = TaskResource::collection($activeTasks);
 
-        if ($user->role === 'vendor') {
+        // if ($user->role === 'vendor') {
+        //     return inertia(
+        //         'VendorUser/Dashboard'
+        //     );
+        // }
+        if ($user->role === 'islamicCenter') {
             return inertia(
-                'VendorUser/Dashboard'
+                'IslamicCenter/Dashboard'
             );
         }
         return inertia(

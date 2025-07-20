@@ -1,27 +1,25 @@
-import VendorLayout from "@/Layouts/VendorLayout";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
-import { Head, Link } from "@inertiajs/react";
+import PageBreadcrumb from "@/Components/common/PageBreadCrumb";
+import PageMeta from "@/Components/common/PageMeta";
 
-const capitalizeWords = (str) =>
-  str
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-
-export default function Dashboard({
-  auth,
-}) {
+export default function Dashboard() {
   return (
-    <VendorLayout
-      user={auth.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Hi {capitalizeWords(auth.user.name)} (Vendor)
-        </h2>
-      }
-    >
-      <Head title="Dashboard" />
+    <div>
+      <PageMeta
+        title="Dashboard"
+        description="Dashboard"
+      />
+      <PageBreadcrumb pageTitle="Dashboard" />
+      <div className="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12">
+        <div className="mx-auto w-full max-w-[630px] text-center">
+          <h3 className="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
+            Dashboard
+          </h3>
 
-    </VendorLayout>
+          <p className="text-sm text-gray-500 dark:text-gray-400 sm:text-base">
+            Islamic Center
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

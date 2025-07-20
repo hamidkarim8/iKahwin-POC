@@ -43,3 +43,4 @@ export default function VerifyEmail({ status }) {
         </GuestLayout>
     );
 }
+VerifyEmail.layout = (page) => page;

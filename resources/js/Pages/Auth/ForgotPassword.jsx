@@ -48,3 +48,4 @@ export default function ForgotPassword({ status }) {
         </GuestLayout>
     );
 }
+ForgotPassword.layout = (page) => page;

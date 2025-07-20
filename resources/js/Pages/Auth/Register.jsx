@@ -78,8 +78,7 @@ export default function Register() {
                       required
                   >
                       <option value="">-- Select Role --</option>
-                      <option value="user">User</option>
-                      <option value="vendor">Vendor</option>
+                      <option value="islamicCenter">Islamic Center</option>
                   </SelectInput>
                   <InputError message={errors.role} className="mt-2" />
               </div>
@@ -134,3 +133,4 @@ export default function Register() {
         </GuestLayout>
     );
 }
+Register.layout = (page) => page;

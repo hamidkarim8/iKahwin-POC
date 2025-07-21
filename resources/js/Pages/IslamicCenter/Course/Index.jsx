@@ -1,14 +1,20 @@
 import { React, useState, useEffect } from "react";
 import CreateCourseModal from "./Create";
+import EditCourseModal from "./Edit";
 import PageBreadcrumb from "@/Components/common/PageBreadCrumb";
 import PageMeta from "@/Components/common/PageMeta";
+import DeleteAlert from "@/Components/common/DeleteAlert";
 import { Link } from "@inertiajs/react";
 
 export default function Index({ courses }) {
   const [showModal, setShowModal] = useState(false);
+  const [editingCourse, setEditingCourse] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   useEffect(() => {
-    document.body.style.overflow = showModal ? 'hidden' : '';
+    document.body.style.overflow = showModal ? "hidden" : "";
   }, [showModal]);
+
   return (
     <div>
       <PageMeta title="Course Management" description="Course Management" />
@@ -89,32 +95,20 @@ export default function Index({ courses }) {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-white">
                     <div className="flex space-x-2">
-                      <Link
-                        href={route("course.update", course.id)}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingCourse(course);
+                          setShowEditModal(true);
+                        }}
                         className="text-blue-600 hover:underline"
                       >
                         Edit
-                      </Link>
-                      <form
-                        method="POST"
-                        action={route("course.destroy", course.id)}
-                        onSubmit={(e) => {
-                          if (
-                            !confirm(
-                              "Are you sure you want to delete this course?"
-                            )
-                          )
-                            e.preventDefault();
-                        }}
-                      >
-                        <input type="hidden" name="_method" value="DELETE" />
-                        <button
-                          type="submit"
-                          className="text-red-600 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </form>
+                      </button>
+                      <DeleteAlert
+                        routeName="course.destroy"
+                        resourceId={course.id}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -134,6 +128,12 @@ export default function Index({ courses }) {
         </div>
       </div>
       {showModal && <CreateCourseModal onClose={() => setShowModal(false)} />}
+      {showEditModal && editingCourse && (
+        <EditCourseModal
+          course={editingCourse}
+          onClose={() => setShowEditModal(false)}
+        />
+      )}
     </div>
   );
 }

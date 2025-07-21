@@ -45,6 +45,10 @@ class Course extends Model
     {
         return $this->hasMany(CourseImage::class);
     }
+    public function video()
+    {
+        return $this->hasOne(CourseVideo::class);
+    }
 
     public function user()
     {

@@ -19,7 +19,7 @@ const LayoutContent = ({ children }) => {
         } ${isMobileOpen ? "ml-0" : ""}`}
       >
         <AppHeader />
-        <div className="p-4 mx-auto max-w-screen-2xl md:p-6 bg-white dark:bg-gray-900">
+        <div className="p-4 mx-auto max-w-full md:p-6 bg-white dark:bg-gray-900">
           {children}
         </div>
       </div>

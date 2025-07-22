@@ -15,7 +15,7 @@ class CourseController extends Controller
     {
         $user = auth()->user();
 
-        $courses = Course::with('images')->with('video')
+        $courses = Course::with('images')->with('video')->with('schedules')
             ->where('created_by', $user->id)
             ->latest()
             ->get();
@@ -31,8 +31,10 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'schedules' => 'required|array|min:1',
+            'schedules.*.date' => 'required|date',
+            'schedules.*.start_time' => 'required',
+            'schedules.*.end_time' => 'required',
             'description' => 'nullable|string',
             'address_line' => 'required|string',
             'city' => 'required|string',
@@ -42,7 +44,7 @@ class CourseController extends Controller
             'max_participants' => 'required|integer|min:1',
             'images' => 'required|array|min:1',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'video' => 'nullable|file|mimes:mp4,mov,avi|max:10240', // max 10MB
+            'video' => 'nullable|file|mimes:mp4,mov,avi|max:10240',
         ]);
 
         $course = Course::create([
@@ -50,8 +52,6 @@ class CourseController extends Controller
             'title' => $request->title,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
             'description' => $request->description,
             'address_line' => $request->address_line,
             'city' => $request->city,
@@ -60,6 +60,15 @@ class CourseController extends Controller
             'price' => $request->price,
             'max_participants' => $request->max_participants,
         ]);
+
+        // Save schedules
+        foreach ($request->schedules as $sched) {
+            $course->schedules()->create([
+                'date' => $sched['date'],
+                'start_time' => $sched['start_time'],
+                'end_time' => $sched['end_time'],
+            ]);
+        }
 
         foreach ($request->file('images') as $image) {
             $path = $image->store('courses/course_images', 'public');
@@ -90,8 +99,10 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'schedules' => 'required|array|min:1',
+            'schedules.*.date' => 'required|date',
+            'schedules.*.start_time' => 'required',
+            'schedules.*.end_time' => 'required',
             'description' => 'nullable|string',
             'address_line' => 'required|string',
             'city' => 'required|string',
@@ -111,8 +122,6 @@ class CourseController extends Controller
             'title' => $request->title,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
             'description' => $request->description,
             'address_line' => $request->address_line,
             'city' => $request->city,
@@ -123,6 +132,15 @@ class CourseController extends Controller
             'status' => $request->status,
         ]);
 
+        // Sync schedules: delete old, add new (simple approach)
+        $course->schedules()->delete();
+        foreach ($request->schedules as $sched) {
+            $course->schedules()->create([
+                'date' => $sched['date'],
+                'start_time' => $sched['start_time'],
+                'end_time' => $sched['end_time'],
+            ]);
+        }
 
         // Delete removed images
         if ($request->filled('deleted_images')) {
@@ -180,6 +198,8 @@ class CourseController extends Controller
             $course->video->delete();
         }
 
+        $course->schedules()->delete();
+
         $course->delete();
 
         return redirect()->route('course.index')->with('success', 'Course deleted successfully.');
@@ -188,11 +208,8 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        // $this->authorize('view', $course);
-
-        $course->load('images');
-
-        return Inertia::render('IslamicCenter/CourseDetail', [
+        $course->load('images', 'video', 'schedules');
+        return Inertia::render('IslamicCenter/Course/Show', [
             'course' => $course,
         ]);
     }

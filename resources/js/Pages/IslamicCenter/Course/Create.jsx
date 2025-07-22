@@ -1,15 +1,26 @@
 import { useForm } from "@inertiajs/react";
 import DropzoneImage from "@/Components/DropzoneImage";
 import DropzoneVideo from "@/Components/DropzoneVideo";
+import { useState, useMemo } from "react";
+import { formatDateDMY } from "@/Components/common/dateUtils";
+import { showCreateAlert } from "@/Components/common/CreateAlert";
+
+function getDatesInRange(start, end) {
+  const dates = [];
+  let current = new Date(start);
+  const endDate = new Date(end);
+  while (current <= endDate) {
+    dates.push(current.toISOString().split("T")[0]);
+    current.setDate(current.getDate() + 1);
+  }
+  return dates;
+}
 
 export default function Create({ onClose }) {
-
   const { data, setData, post, processing, errors, reset } = useForm({
     title: "",
     start_date: "",
     end_date: "",
-    start_time: "",
-    end_time: "",
     description: "",
     address_line: "",
     city: "",
@@ -18,15 +29,46 @@ export default function Create({ onClose }) {
     price: "",
     max_participants: "",
     images: [],
-    video: null
+    video: null,
+    schedules: [],
   });
 
   const today = new Date().toISOString().split("T")[0];
 
+  // Compute the list of dates between start_date and end_date
+  const scheduleDates = useMemo(() => {
+    if (!data.start_date || !data.end_date) return [];
+    if (new Date(data.end_date) < new Date(data.start_date)) return [];
+    return getDatesInRange(data.start_date, data.end_date);
+  }, [data.start_date, data.end_date]);
+
+  // Ensure schedules array matches the date range
+  const schedules = useMemo(() => {
+    return scheduleDates.map((date) => {
+      const found = data.schedules.find((s) => s.date === date);
+      return {
+        date,
+        start_time: found ? found.start_time : "",
+        end_time: found ? found.end_time : "",
+      };
+    });
+  }, [scheduleDates, data.schedules]);
+
+  const handleScheduleChange = (date, field, value) => {
+    setData((prev) => ({
+      ...prev,
+      schedules: schedules.map((s) =>
+        s.date === date ? { ...s, [field]: value } : s
+      ),
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setData((prev) => ({ ...prev, schedules }));
     post(route("course.store"), {
       onSuccess: () => {
+        showCreateAlert('course');
         reset();
         onClose();
       },
@@ -57,6 +99,7 @@ export default function Create({ onClose }) {
                 value={data.title}
                 onChange={(e) => setData("title", e.target.value)}
                 className="input"
+                placeholder="Enter course title"
               />
               {errors.title && (
                 <div className="text-red-500 text-sm">{errors.title}</div>
@@ -71,6 +114,7 @@ export default function Create({ onClose }) {
                 value={data.price}
                 onChange={(e) => setData("price", e.target.value)}
                 className="input"
+                placeholder="Enter price"
               />
               {errors.price && (
                 <div className="text-red-500 text-sm">{errors.price}</div>
@@ -85,11 +129,9 @@ export default function Create({ onClose }) {
                 value={data.start_date}
                 onChange={(e) => {
                   const selectedDate = e.target.value;
-                  // Set the start date first
                   setData((prevData) => ({
                     ...prevData,
                     start_date: selectedDate,
-                    // Auto-fill end_date only if it's empty or earlier than the new start date + 1
                     end_date:
                       !prevData.end_date ||
                       new Date(prevData.end_date) < new Date(selectedDate)
@@ -102,6 +144,7 @@ export default function Create({ onClose }) {
                   }));
                 }}
                 className="input"
+                placeholder="Select start date"
               />
               {errors.start_date && (
                 <div className="text-red-500 text-sm">{errors.start_date}</div>
@@ -116,35 +159,10 @@ export default function Create({ onClose }) {
                 value={data.end_date}
                 onChange={(e) => setData("end_date", e.target.value)}
                 className="input"
+                placeholder="Select end date"
               />
               {errors.end_date && (
                 <div className="text-red-500 text-sm">{errors.end_date}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">Start Time</label>
-              <input
-                type="time"
-                value={data.start_time}
-                onChange={(e) => setData("start_time", e.target.value)}
-                className="input"
-              />
-              {errors.start_time && (
-                <div className="text-red-500 text-sm">{errors.start_time}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">End Time</label>
-              <input
-                type="time"
-                value={data.end_time}
-                onChange={(e) => setData("end_time", e.target.value)}
-                className="input"
-              />
-              {errors.end_time && (
-                <div className="text-red-500 text-sm">{errors.end_time}</div>
               )}
             </div>
 
@@ -155,6 +173,7 @@ export default function Create({ onClose }) {
                 value={data.city}
                 onChange={(e) => setData("city", e.target.value)}
                 className="input"
+                placeholder="Enter city"
               />
               {errors.city && (
                 <div className="text-red-500 text-sm">{errors.city}</div>
@@ -168,6 +187,7 @@ export default function Create({ onClose }) {
                 value={data.state}
                 onChange={(e) => setData("state", e.target.value)}
                 className="input"
+                placeholder="Enter state"
               />
               {errors.state && (
                 <div className="text-red-500 text-sm">{errors.state}</div>
@@ -181,6 +201,7 @@ export default function Create({ onClose }) {
                 value={data.postcode}
                 onChange={(e) => setData("postcode", e.target.value)}
                 className="input"
+                placeholder="Enter postcode"
               />
               {errors.postcode && (
                 <div className="text-red-500 text-sm">{errors.postcode}</div>
@@ -195,6 +216,7 @@ export default function Create({ onClose }) {
                 value={data.max_participants}
                 onChange={(e) => setData("max_participants", e.target.value)}
                 className="input"
+                placeholder="Enter max participants"
               />
               {errors.max_participants && (
                 <div className="text-red-500 text-sm">
@@ -204,6 +226,68 @@ export default function Create({ onClose }) {
             </div>
           </div>
 
+          {/* Schedule Section */}
+          {scheduleDates.length > 0 && (
+            <div className="mb-4">
+              <label className="label font-semibold">Schedule</label>
+              <div className="overflow-x-auto">
+                <table className="min-w-full border rounded">
+                  <thead>
+                    <tr>
+                      <th className="px-2 py-1 border">Date</th>
+                      <th className="px-2 py-1 border">Start Time</th>
+                      <th className="px-2 py-1 border">End Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {schedules.map((sched, idx) => (
+                      <tr key={sched.date}>
+                        <td className="px-2 py-1 border text-center">
+                          {formatDateDMY(sched.date)}
+                        </td>
+                        <td className="px-2 py-1 border">
+                          <input
+                            type="time"
+                            value={sched.start_time}
+                            onChange={(e) =>
+                              handleScheduleChange(sched.date, "start_time", e.target.value)
+                            }
+                            className="input"
+                            placeholder="Start time"
+                          />
+                          {errors[`schedules.${idx}.start_time`] && (
+                            <div className="text-red-500 text-xs">
+                              {errors[`schedules.${idx}.start_time`]}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-2 py-1 border">
+                          <input
+                            type="time"
+                            value={sched.end_time}
+                            onChange={(e) =>
+                              handleScheduleChange(sched.date, "end_time", e.target.value)
+                            }
+                            className="input"
+                            placeholder="End time"
+                          />
+                          {errors[`schedules.${idx}.end_time`] && (
+                            <div className="text-red-500 text-xs">
+                              {errors[`schedules.${idx}.end_time`]}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {errors.schedules && typeof errors.schedules === 'string' && (
+                  <div className="text-red-500 text-sm mt-1">{errors.schedules}</div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="label">Address Line</label>
             <input
@@ -211,6 +295,7 @@ export default function Create({ onClose }) {
               value={data.address_line}
               onChange={(e) => setData("address_line", e.target.value)}
               className="input"
+              placeholder="Enter address line"
             />
             {errors.address_line && (
               <div className="text-red-500 text-sm">{errors.address_line}</div>
@@ -223,6 +308,7 @@ export default function Create({ onClose }) {
               value={data.description}
               onChange={(e) => setData("description", e.target.value)}
               className="input"
+              placeholder="Enter course description"
             />
             {errors.description && (
               <div className="text-red-500 text-sm">{errors.description}</div>

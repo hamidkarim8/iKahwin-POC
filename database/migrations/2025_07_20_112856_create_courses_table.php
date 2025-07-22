@@ -17,8 +17,8 @@ public function up(): void
         $table->string('title');
         $table->date('start_date');
         $table->date('end_date');
-        $table->time('start_time');
-        $table->time('end_time');
+        // $table->time('start_time');
+        // $table->time('end_time');
         $table->text('description')->nullable();
 
         // Structured address fields

@@ -1,7 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "@inertiajs/react";
 import DropzoneImageEdit from "@/Components/DropzoneImageEdit";
 import DropzoneVideoEdit from "@/Components/DropzoneVideoEdit";
+import Switch from "@/Components/form/switch/Switch";
+import { formatDateDMY } from "@/Components/common/dateUtils";
+import { showUpdateAlert } from "@/Components/common/UpdateAlert";
+
+function getDatesInRange(start, end) {
+  const dates = [];
+  let current = new Date(start);
+  const endDate = new Date(end);
+  while (current <= endDate) {
+    dates.push(current.toISOString().split("T")[0]);
+    current.setDate(current.getDate() + 1);
+  }
+  return dates;
+}
 
 export default function EditCourseModal({ onClose, course }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -9,8 +23,6 @@ export default function EditCourseModal({ onClose, course }) {
     title: course.title || "",
     start_date: course.start_date || "",
     end_date: course.end_date || "",
-    start_time: course.start_time || "",
-    end_time: course.end_time || "",
     description: course.description || "",
     address_line: course.address_line || "",
     city: course.city || "",
@@ -23,6 +35,13 @@ export default function EditCourseModal({ onClose, course }) {
     deleted_images: [],
     video: null,
     delete_video: false,
+    schedules: course.schedules
+      ? course.schedules.map((s) => ({
+          date: s.date ? s.date.slice(0, 10) : "", // Ensures YYYY-MM-DD
+          start_time: s.start_time,
+          end_time: s.end_time,
+        }))
+      : [],
   });
 
   useEffect(() => {
@@ -32,10 +51,40 @@ export default function EditCourseModal({ onClose, course }) {
     };
   }, []);
 
+  // Compute the list of dates between start_date and end_date
+  const scheduleDates = useMemo(() => {
+    if (!data.start_date || !data.end_date) return [];
+    if (new Date(data.end_date) < new Date(data.start_date)) return [];
+    return getDatesInRange(data.start_date, data.end_date);
+  }, [data.start_date, data.end_date]);
+
+  // Ensure schedules array matches the date range
+  const schedules = useMemo(() => {
+    return scheduleDates.map((date) => {
+      const found = data.schedules.find((s) => s.date === date);
+      return {
+        date,
+        start_time: found ? found.start_time : "",
+        end_time: found ? found.end_time : "",
+      };
+    });
+  }, [scheduleDates, data.schedules]);
+
+  const handleScheduleChange = (date, field, value) => {
+    setData((prev) => ({
+      ...prev,
+      schedules: schedules.map((s) =>
+        s.date === date ? { ...s, [field]: value } : s
+      ),
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setData((prev) => ({ ...prev, schedules }));
     post(route("course.update", course.id), {
       onSuccess: () => {
+        showUpdateAlert('course');
         reset();
         onClose();
       },
@@ -59,7 +108,6 @@ export default function EditCourseModal({ onClose, course }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Basic inputs */}
             <div>
               <label className="label">Title</label>
               <input
@@ -92,7 +140,22 @@ export default function EditCourseModal({ onClose, course }) {
               <input
                 type="date"
                 value={data.start_date}
-                onChange={(e) => setData("start_date", e.target.value)}
+                onChange={(e) => {
+                  const selectedDate = e.target.value;
+                  setData((prevData) => ({
+                    ...prevData,
+                    start_date: selectedDate,
+                    end_date:
+                      !prevData.end_date ||
+                      new Date(prevData.end_date) < new Date(selectedDate)
+                        ? (() => {
+                            const nextDay = new Date(selectedDate);
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            return nextDay.toISOString().split("T")[0];
+                          })()
+                        : prevData.end_date,
+                  }));
+                }}
                 className="input"
               />
               {errors.start_date && (
@@ -104,38 +167,13 @@ export default function EditCourseModal({ onClose, course }) {
               <label className="label">End Date</label>
               <input
                 type="date"
+                min={data.start_date}
                 value={data.end_date}
                 onChange={(e) => setData("end_date", e.target.value)}
                 className="input"
               />
               {errors.end_date && (
                 <div className="text-red-500 text-sm">{errors.end_date}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">Start Time</label>
-              <input
-                type="time"
-                value={data.start_time}
-                onChange={(e) => setData("start_time", e.target.value)}
-                className="input"
-              />
-              {errors.start_time && (
-                <div className="text-red-500 text-sm">{errors.start_time}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">End Time</label>
-              <input
-                type="time"
-                value={data.end_time}
-                onChange={(e) => setData("end_time", e.target.value)}
-                className="input"
-              />
-              {errors.end_time && (
-                <div className="text-red-500 text-sm">{errors.end_time}</div>
               )}
             </div>
 
@@ -195,6 +233,66 @@ export default function EditCourseModal({ onClose, course }) {
             </div>
           </div>
 
+          {/* Schedule Section */}
+          {scheduleDates.length > 0 && (
+            <div className="mb-4">
+              <label className="label font-semibold">Schedule</label>
+              <div className="overflow-x-auto">
+                <table className="min-w-full border rounded">
+                  <thead>
+                    <tr>
+                      <th className="px-2 py-1 border">Date</th>
+                      <th className="px-2 py-1 border">Start Time</th>
+                      <th className="px-2 py-1 border">End Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {schedules.map((sched, idx) => (
+                      <tr key={sched.date}>
+                        <td className="px-2 py-1 border text-center">
+                          {formatDateDMY(sched.date)}
+                        </td>
+                        <td className="px-2 py-1 border">
+                          <input
+                            type="time"
+                            value={sched.start_time}
+                            onChange={(e) =>
+                              handleScheduleChange(sched.date, "start_time", e.target.value)
+                            }
+                            className="input"
+                          />
+                          {errors[`schedules.${idx}.start_time`] && (
+                            <div className="text-red-500 text-xs">
+                              {errors[`schedules.${idx}.start_time`]}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-2 py-1 border">
+                          <input
+                            type="time"
+                            value={sched.end_time}
+                            onChange={(e) =>
+                              handleScheduleChange(sched.date, "end_time", e.target.value)
+                            }
+                            className="input"
+                          />
+                          {errors[`schedules.${idx}.end_time`] && (
+                            <div className="text-red-500 text-xs">
+                              {errors[`schedules.${idx}.end_time`]}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {errors.schedules && typeof errors.schedules === 'string' && (
+                  <div className="text-red-500 text-sm mt-1">{errors.schedules}</div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="label">Address Line</label>
             <input
@@ -217,6 +315,21 @@ export default function EditCourseModal({ onClose, course }) {
             />
             {errors.description && (
               <div className="text-red-500 text-sm">{errors.description}</div>
+            )}
+          </div>
+
+          <div>
+            <label className="label">Status</label>
+            <Switch
+              label={data.status === "active" ? "Active" : "Inactive"}
+              defaultChecked={data.status === "active"}
+              onChange={(checked) =>
+                setData("status", checked ? "active" : "inactive")
+              }
+              color="blue"
+            />
+            {errors.status && (
+              <div className="text-red-500 text-sm">{errors.status}</div>
             )}
           </div>
 

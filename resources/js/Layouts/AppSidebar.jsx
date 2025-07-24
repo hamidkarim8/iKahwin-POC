@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
+import { route } from 'ziggy-js';
 
 // Assume these icons are imported from an icon library
 import {
@@ -27,17 +28,17 @@ const navItems = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    path: "/dashboard",
+    path: route('dashboard'),
   },
   {
     icon: <UserCircleIcon />,
     name: "User Profile",
-    path: "/profile",
+    path: route('profile.edit'),
   },
   {
     icon: <CalenderIcon />,
     name: "Course Management",
-    path: "/course",
+    path: route('course.index'),
   },
   // {
   //   icon: (
@@ -268,7 +269,7 @@ const AppSidebar = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link href="/dashboard" className="inline-flex items-center justify-center w-full">
+        <Link href={route('dashboard')} className="inline-flex items-center justify-center w-full">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img

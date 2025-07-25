@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import logoLight from '../../../public/images/logo/logo-ikahwin-light.svg';
-import logoDark from '../../../public/images/logo/logo-ikahwin-dark.png';
 
 export default function ApplicationLogo(props) {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -20,6 +18,9 @@ export default function ApplicationLogo(props) {
 
     return () => observer.disconnect();
   }, []);
+
+  const logoLight = "/images/logo/logo-ikahwin-light.svg";
+  const logoDark = "/images/logo/logo-ikahwin-dark.png";
 
   return (
     <img

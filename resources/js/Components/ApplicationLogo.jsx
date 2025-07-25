@@ -19,8 +19,9 @@ export default function ApplicationLogo(props) {
     return () => observer.disconnect();
   }, []);
 
-  const logoLight = "/images/logo/logo-ikahwin-light.svg";
-  const logoDark = "/images/logo/logo-ikahwin-dark.png";
+  const base = import.meta.env.BASE_URL || '/';
+  const logoDark = `${base}images/logo/logo-ikahwin-dark.png`;
+  const logoLight = `${base}images/logo/logo-ikahwin-light.svg`;
 
   return (
     <img

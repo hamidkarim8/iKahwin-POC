@@ -5,6 +5,7 @@ export default function DropzoneImageEdit({
   setData,
   errors,
   existingImages = [],
+  baseUrl,
 }) {
   const fileInputRef = useRef();
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -14,13 +15,15 @@ export default function DropzoneImageEdit({
 
   useEffect(() => {
     const formatted = existingImages.map((img) => ({
-      url: `/storage/${img.image_path}`,
+      url: img.image_path.startsWith("/storage")
+        ? `${baseUrl}${img.image_path}`
+        : `${baseUrl}/storage/${img.image_path}`,
       name: img.image_path.split("/").pop(),
       existing: true,
       id: img.id,
     }));
     setImagePreviews(formatted);
-  }, [existingImages]);
+  }, [existingImages, baseUrl]);
 
   useEffect(() => {
     setData("deleted_images", deletedImageIds);

@@ -22,6 +22,7 @@ class CourseController extends Controller
 
         return Inertia::render('IslamicCenter/Course/Index', [
             'courses' => $courses,
+            'baseUrl' => config('app.url'),
         ]);
     }
 

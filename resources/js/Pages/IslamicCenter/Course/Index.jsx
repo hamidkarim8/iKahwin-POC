@@ -240,7 +240,7 @@ function CalendarModal({ schedules, open, onClose }) {
   );
 }
 
-export default function Index({ courses }) {
+export default function Index({ courses, baseUrl}) {
   const [showModal, setShowModal] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -399,6 +399,7 @@ export default function Index({ courses }) {
         <EditCourseModal
           course={editingCourse}
           onClose={() => setShowEditModal(false)}
+          baseUrl={baseUrl}
         />
       )}
       {calendarCourse && (

@@ -5,6 +5,7 @@ export default function DropzoneVideoEdit({
   setData,
   error,
   existingVideo,
+  baseUrl,
 }) {
   const fileInputRef = useRef();
   const [videoPreview, setVideoPreview] = useState(null);
@@ -12,10 +13,13 @@ export default function DropzoneVideoEdit({
 
   useEffect(() => {
     if (existingVideo && !data.video && !data.delete_video) {
-      setVideoPreview(`/storage/${existingVideo.video_path}`);
+      const videoPath = existingVideo.video_path.startsWith("/storage")
+        ? `${baseUrl}${existingVideo.video_path}`
+        : `${baseUrl}/storage/${existingVideo.video_path}`;
+      setVideoPreview(videoPath);
       setFilename(existingVideo.video_path.split("/").pop());
     }
-  }, [existingVideo]);
+  }, [existingVideo, baseUrl]);
 
   const handleFile = (file) => {
     if (!file) return;

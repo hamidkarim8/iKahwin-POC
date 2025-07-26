@@ -17,7 +17,7 @@ function getDatesInRange(start, end) {
   return dates;
 }
 
-export default function EditCourseModal({ onClose, course }) {
+export default function EditCourseModal({ onClose, course, baseUrl }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     _method: "PUT",
     title: course.title || "",
@@ -338,6 +338,7 @@ export default function EditCourseModal({ onClose, course }) {
             setData={setData}
             errors={errors}
             existingImages={course.images}
+            baseUrl={baseUrl}
           />
 
           <DropzoneVideoEdit
@@ -345,6 +346,7 @@ export default function EditCourseModal({ onClose, course }) {
             setData={setData}
             error={errors.video}
             existingVideo={course.video}
+            baseUrl={baseUrl}
           />
 
           <div className="flex justify-end space-x-2 pt-4">

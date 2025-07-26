@@ -211,6 +211,7 @@ class CourseController extends Controller
         $course->load('images', 'video', 'schedules');
         return Inertia::render('IslamicCenter/Course/Show', [
             'course' => $course,
+            'baseUrl' => config('app.url'),
         ]);
     }
 }

@@ -26,23 +26,17 @@ export default function DeleteAlert({
       if (result.isConfirmed) {
         router.post(route(routeName, resourceId), {
           _method: 'DELETE',
-          onSuccess: () => {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Item has been deleted.",
-              icon: "success",
-              ...swalOptions,
-            });
-          },
-          onError: () => {
-            Swal.fire({
-              title: "Error!",
-              text: "Something went wrong.",
-              icon: "error",
-              ...swalOptions,
-            });
-          },
         });
+        
+        // Show success message after a short delay
+        setTimeout(() => {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Item has been deleted.",
+            icon: "success",
+            ...swalOptions,
+          });
+        }, 500);
       }
     });
   };

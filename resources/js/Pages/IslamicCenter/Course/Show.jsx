@@ -261,8 +261,8 @@ export default function Show({ course, baseUrl }) {
                   className="w-full max-w-md rounded border shadow mx-auto"
                   src={
                     course.video.video_path.startsWith("/storage")
-                      ? course.video.video_path
-                      : `/storage/${course.video.video_path}`
+                      ? `${baseUrl}${course.video.video_path}`
+                      : `${baseUrl}/storage/${course.video.video_path}`
                   }
                 >
                   Your browser does not support the video tag.

@@ -15,7 +15,7 @@ export default function DeleteAlert({
   const handleDelete = () => {
     Swal.fire({
       title: "Are you sure?",
-      text: "This action cannot be undone test.",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#e3342f",

@@ -15,7 +15,7 @@ export default function DeleteAlert({
   const handleDelete = () => {
     Swal.fire({
       title: "Are you sure?",
-      text: "This action cannot be undone.",
+      text: "This action cannot be undone test.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#e3342f",
@@ -24,7 +24,8 @@ export default function DeleteAlert({
       ...swalOptions,
     }).then((result) => {
       if (result.isConfirmed) {
-        router.delete(route(routeName, resourceId), {
+        router.post(route(routeName, resourceId), {
+          _method: 'DELETE',
           onSuccess: () => {
             Swal.fire({
               title: "Deleted!",

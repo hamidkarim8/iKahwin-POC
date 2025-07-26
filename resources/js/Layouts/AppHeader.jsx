@@ -85,18 +85,18 @@ const AppHeader = () => {
 
           <Link to="/" className="lg:hidden">
             <img
-              className="dark:hidden"
-              src="./images/logo/logo-ikahwin-light.svg"
+              className="dark:hidden w-14 h-14"
+              src={`${import.meta.env.BASE_URL}images/logo/logo-ikahwin-light.svg`}
               alt="Logo"
             />
             <img
-              className="hidden dark:block"
-              src="./images/logo/logo-ikahwin-dark.png"
+              className="hidden dark:block w-14 h-14"
+              src={`${import.meta.env.BASE_URL}images/logo/logo-ikahwin-dark.png`}
               alt="Logo"
             />
           </Link>
 
-          {/* <button
+          <button
             onClick={toggleApplicationMenu}
             className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
           >
@@ -114,7 +114,7 @@ const AppHeader = () => {
                 fill="currentColor"
               />
             </svg>
-          </button> */}
+          </button>
 
           {/* <div className="hidden lg:block">
             <form>

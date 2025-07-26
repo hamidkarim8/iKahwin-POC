@@ -32,8 +32,8 @@ const navItems = [
   },
   {
     icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: route('profile.edit'),
+    name: "Profile",
+    path: "#",
   },
   {
     icon: <CalenderIcon />,

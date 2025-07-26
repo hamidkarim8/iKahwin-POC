@@ -165,69 +165,10 @@ export default function Create({ onClose }) {
                 <div className="text-red-500 text-sm">{errors.end_date}</div>
               )}
             </div>
-
-            <div>
-              <label className="label">City</label>
-              <input
-                type="text"
-                value={data.city}
-                onChange={(e) => setData("city", e.target.value)}
-                className="input"
-                placeholder="Enter city"
-              />
-              {errors.city && (
-                <div className="text-red-500 text-sm">{errors.city}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">State</label>
-              <input
-                type="text"
-                value={data.state}
-                onChange={(e) => setData("state", e.target.value)}
-                className="input"
-                placeholder="Enter state"
-              />
-              {errors.state && (
-                <div className="text-red-500 text-sm">{errors.state}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">Postcode</label>
-              <input
-                type="text"
-                value={data.postcode}
-                onChange={(e) => setData("postcode", e.target.value)}
-                className="input"
-                placeholder="Enter postcode"
-              />
-              {errors.postcode && (
-                <div className="text-red-500 text-sm">{errors.postcode}</div>
-              )}
-            </div>
-
-            <div>
-              <label className="label">Max Participants</label>
-              <input
-                type="number"
-                min="0"
-                value={data.max_participants}
-                onChange={(e) => setData("max_participants", e.target.value)}
-                className="input"
-                placeholder="Enter max participants"
-              />
-              {errors.max_participants && (
-                <div className="text-red-500 text-sm">
-                  {errors.max_participants}
-                </div>
-              )}
-            </div>
           </div>
 
-          {/* Schedule Section */}
-          {scheduleDates.length > 0 && (
+                    {/* Schedule Section */}
+                    {scheduleDates.length > 0 && (
             <div className="mb-4">
               <label className="label font-semibold">Schedule</label>
               <div className="overflow-x-auto">
@@ -287,7 +228,6 @@ export default function Create({ onClose }) {
               </div>
             </div>
           )}
-
           <div>
             <label className="label">Address Line</label>
             <input
@@ -300,6 +240,69 @@ export default function Create({ onClose }) {
             {errors.address_line && (
               <div className="text-red-500 text-sm">{errors.address_line}</div>
             )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="label">City</label>
+              <input
+                type="text"
+                value={data.city}
+                onChange={(e) => setData("city", e.target.value)}
+                className="input"
+                placeholder="Enter city"
+              />
+              {errors.city && (
+                <div className="text-red-500 text-sm">{errors.city}</div>
+              )}
+            </div>
+
+            <div>
+              <label className="label">State</label>
+              <input
+                type="text"
+                value={data.state}
+                onChange={(e) => setData("state", e.target.value)}
+                className="input"
+                placeholder="Enter state"
+              />
+              {errors.state && (
+                <div className="text-red-500 text-sm">{errors.state}</div>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="label">Postcode</label>
+              <input
+                type="text"
+                value={data.postcode}
+                onChange={(e) => setData("postcode", e.target.value)}
+                className="input"
+                placeholder="Enter postcode"
+              />
+              {errors.postcode && (
+                <div className="text-red-500 text-sm">{errors.postcode}</div>
+              )}
+            </div>
+
+            <div>
+              <label className="label">Max Participants</label>
+              <input
+                type="number"
+                min="0"
+                value={data.max_participants}
+                onChange={(e) => setData("max_participants", e.target.value)}
+                className="input"
+                placeholder="Enter max participants"
+              />
+              {errors.max_participants && (
+                <div className="text-red-500 text-sm">
+                  {errors.max_participants}
+                </div>
+              )}
+            </div>
           </div>
 
           <div>

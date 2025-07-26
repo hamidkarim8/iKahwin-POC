@@ -137,10 +137,11 @@ function CalendarSchedule({ schedules }) {
 
 export default function Show({ course }) {
   // Prepare images for carousel
+  const baseUrl = import.meta.env.VITE_BASE_URL || '';
   const images = (course.images || []).map((img, i) => ({
     src: img.image_path.startsWith("/storage")
-      ? img.image_path
-      : `/storage/${img.image_path}`,
+      ? `${baseUrl}${img.image_path}`
+      : `${baseUrl}/storage/${img.image_path}`,
     alt: `Course image ${i + 1}`,
   }));
 

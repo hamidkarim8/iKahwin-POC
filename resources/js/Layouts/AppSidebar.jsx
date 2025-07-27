@@ -33,7 +33,7 @@ const navItems = [
   {
     icon: <UserCircleIcon />,
     name: "Profile",
-    path: "#",
+    path: route('profile.index'),
   },
   {
     icon: <CalenderIcon />,

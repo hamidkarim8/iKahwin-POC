@@ -198,7 +198,7 @@ export default function Show({ course, baseUrl }) {
                   Schedule
                 </h3>
               </div>
-              <CalendarSchedule schedules={course.schedules} />
+              {/* <CalendarSchedule schedules={course.schedules} /> */}
               <div className="mt-6">
                 <h4 className="font-semibold text-sm mb-2 text-gray-700 dark:text-gray-200">
                   Schedule Details

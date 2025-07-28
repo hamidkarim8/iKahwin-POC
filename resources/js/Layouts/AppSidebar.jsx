@@ -32,7 +32,7 @@ const navItems = [
   },
   {
     icon: <UserCircleIcon />,
-    name: "Profile",
+    name: "Vendor Information",
     path: route('profile.index'),
   },
   {

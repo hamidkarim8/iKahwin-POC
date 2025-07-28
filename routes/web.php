@@ -26,6 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::post('/', [ProfileController::class, 'store'])->name('store');
+        Route::get('/{profile}', [ProfileController::class, 'show'])->name('show');
+        Route::put('/{profile}', [ProfileController::class, 'update'])->name('update');
     });
 
     // Route::resource('project', ProjectController::class);

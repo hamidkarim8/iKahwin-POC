@@ -14,20 +14,23 @@ export default function DropzoneImageEdit({
   const [deletedImageIds, setDeletedImageIds] = useState([]);
 
   useEffect(() => {
-    const formatted = existingImages.map((img) => ({
-      url: img.image_path.startsWith("/storage")
-        ? `${baseUrl}${img.image_path}`
-        : `${baseUrl}/storage/${img.image_path}`,
-      name: img.image_path.split("/").pop(),
-      existing: true,
-      id: img.id,
-    }));
+    // Filter out deleted images from the previews
+    const formatted = existingImages
+      .filter((img) => !deletedImageIds.includes(img.id))
+      .map((img) => ({
+        url: img.image_path.startsWith("/storage")
+          ? `${baseUrl}${img.image_path}`
+          : `${baseUrl}/storage/${img.image_path}`,
+        name: img.image_path.split("/").pop(),
+        existing: true,
+        id: img.id,
+      }));
     setImagePreviews(formatted);
-  }, [existingImages, baseUrl]);
+  }, [existingImages, baseUrl, deletedImageIds]);
 
   useEffect(() => {
-    setData("deleted_images", deletedImageIds);
-  }, [deletedImageIds]);
+    setData("deleted_images", deletedImageIds || []);
+  }, [deletedImageIds, setData]);
 
   const handleFiles = (files) => {
     const fileList = Array.from(files);
@@ -47,7 +50,7 @@ export default function DropzoneImageEdit({
     }));
 
     setImagePreviews((prev) => [...prev, ...newFiles]);
-    setData("images", [...data.images, ...fileList]);
+    setData("images", [...(data.images || []), ...fileList]);
   };
 
   const handleDrop = (e) => {
@@ -70,8 +73,10 @@ export default function DropzoneImageEdit({
     if (removed.existing) {
       setDeletedImageIds((prev) => [...prev, removed.id]);
     } else {
-      const updatedFiles = [...data.images];
-      updatedFiles.splice(index - existingImages.length, 1);
+      // Find the correct index in the data.images array
+      const newFileIndex = updatedPreviews.filter((_, i) => i < index && !updatedPreviews[i].existing).length;
+      const updatedFiles = [...(data.images || [])];
+      updatedFiles.splice(newFileIndex, 1);
       setData("images", updatedFiles);
     }
 

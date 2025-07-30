@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\Profile;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -29,10 +30,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $hasProfile = false;
+        
+        if ($user) {
+            $hasProfile = Profile::where('user_id', $user->id)->exists();
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
+                'hasProfile' => $hasProfile,
             ],
         ];
     }

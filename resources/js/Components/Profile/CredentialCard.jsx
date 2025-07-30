@@ -9,10 +9,10 @@ export default function CredentialCard({ user, baseUrl, onEdit }) {
     <div className="relative rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
       <button
         onClick={onEdit}
-        className="absolute top-5 right-5 flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+        className="absolute top-3 right-3 sm:top-5 sm:right-5 flex items-center gap-1 sm:gap-2 rounded-full border border-gray-300 bg-white px-2 py-1.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
         <svg
-          className="fill-current"
+          className="fill-current w-3 h-3 sm:w-4 sm:h-4"
           width="18"
           height="18"
           viewBox="0 0 18 18"
@@ -26,7 +26,8 @@ export default function CredentialCard({ user, baseUrl, onEdit }) {
             fill=""
           />
         </svg>
-        Edit Information
+        <span className="hidden sm:inline">Edit Information</span>
+        <span className="sm:hidden">Edit Information</span>
       </button>
       <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
         Information Preview
@@ -52,6 +53,8 @@ export default function CredentialCard({ user, baseUrl, onEdit }) {
             </div>
           </div>
         </section>
+
+        <hr className="border-t border-gray-200 dark:border-gray-700" />
 
         {/* Security Information */}
         <section>
@@ -82,6 +85,8 @@ export default function CredentialCard({ user, baseUrl, onEdit }) {
             </div>
           </div>
         </section>
+
+        <hr className="border-t border-gray-200 dark:border-gray-700" />
 
         {/* Account Status */}
         <section>

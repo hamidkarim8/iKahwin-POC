@@ -153,7 +153,7 @@ export default function EditCredentialModal({ onClose, user, baseUrl }) {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-center gap-3 pt-4 border-t">
+          <div className="flex justify-center gap-3 pt-4">
             <button
               type="button"
               onClick={onClose}

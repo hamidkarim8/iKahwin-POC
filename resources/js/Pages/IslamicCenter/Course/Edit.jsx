@@ -182,28 +182,28 @@ export default function EditCourseModal({ onClose, course, baseUrl }) {
             <div className="mb-4">
               <label className="label font-semibold">Schedule</label>
               <div className="overflow-x-auto">
-                <table className="min-w-full border rounded">
+                <table className="min-w-full border rounded border-gray-200 dark:border-gray-700">
                   <thead>
                     <tr>
-                      <th className="px-2 py-1 border">Date</th>
-                      <th className="px-2 py-1 border">Start Time</th>
-                      <th className="px-2 py-1 border">End Time</th>
+                      <th className="px-2 py-1 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">Date</th>
+                      <th className="px-2 py-1 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">Start Time</th>
+                      <th className="px-2 py-1 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">End Time</th>
                     </tr>
                   </thead>
                   <tbody>
                     {schedules.map((sched, idx) => (
                       <tr key={sched.date}>
-                        <td className="px-2 py-1 border text-center">
+                        <td className="px-2 py-1 border border-gray-200 dark:border-gray-700 text-center text-gray-900 dark:text-gray-100">
                           {formatDateDMY(sched.date)}
                         </td>
-                        <td className="px-2 py-1 border">
+                        <td className="px-2 py-1 border border-gray-200 dark:border-gray-700">
                           <input
                             type="time"
                             value={sched.start_time}
                             onChange={(e) =>
                               handleScheduleChange(sched.date, "start_time", e.target.value)
                             }
-                            className="input"
+                            className="input bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
                           />
                           {errors[`schedules.${idx}.start_time`] && (
                             <div className="text-red-500 text-xs">
@@ -211,14 +211,14 @@ export default function EditCourseModal({ onClose, course, baseUrl }) {
                             </div>
                           )}
                         </td>
-                        <td className="px-2 py-1 border">
+                        <td className="px-2 py-1 border border-gray-200 dark:border-gray-700">
                           <input
                             type="time"
                             value={sched.end_time}
                             onChange={(e) =>
                               handleScheduleChange(sched.date, "end_time", e.target.value)
                             }
-                            className="input"
+                            className="input bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
                           />
                           {errors[`schedules.${idx}.end_time`] && (
                             <div className="text-red-500 text-xs">

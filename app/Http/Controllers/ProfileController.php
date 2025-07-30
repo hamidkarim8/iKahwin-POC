@@ -159,7 +159,7 @@ class ProfileController extends Controller
             ]);
         }
 
-        return redirect()->route('profile.index', ['role' => $role])->with('success', 'Profile saved successfully.');
+        return redirect()->route('profile.index')->with('success', 'Profile saved successfully.');
     }
 
     public function update(Request $request, Profile $profile)

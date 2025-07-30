@@ -280,7 +280,7 @@ function GallerySection({ profile, baseUrl }) {
           Images
         </div>
         {hasImages ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
             {profile.images.map((img, idx) => (
               <div
                 key={img.id || idx}
@@ -309,15 +309,15 @@ function GallerySection({ profile, baseUrl }) {
           Video
         </div>
         {hasVideo ? (
-          <div className="w-full max-w-md mx-auto">
+          <div className="w-44 h-44 rounded-lg overflow-hidden shadow border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
             <video
               src={`${baseUrl}/storage/${profile.video.video_path}`}
-              className="w-full h-64 rounded-lg shadow border border-gray-200 dark:border-gray-700"
+              className="object-cover w-full h-full cursor-pointer hover:opacity-90 transition-opacity"
               controls
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-32 bg-gray-100 dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
+          <div className="w-44 h-44 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
             {videoSVG}
             <span className="text-xs text-gray-400 mt-2">No video</span>
           </div>

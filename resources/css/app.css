@@ -6,6 +6,42 @@
   body {
     @apply relative text-base font-normal z-1 bg-gray-50;
   }
+
+  /* Dark mode styles for time picker icons */
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+  }
+
+  .dark input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  /* For Firefox */
+  input[type="time"]::-moz-calendar-picker-indicator {
+    filter: invert(0);
+  }
+
+  .dark input[type="time"]::-moz-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  /* Dark mode styles for date picker icons */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+  }
+
+  .dark input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  /* For Firefox */
+  input[type="date"]::-moz-calendar-picker-indicator {
+    filter: invert(0);
+  }
+
+  .dark input[type="date"]::-moz-calendar-picker-indicator {
+    filter: invert(1);
+  }
 }
 
 @layer components {

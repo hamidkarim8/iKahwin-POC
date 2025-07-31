@@ -73,8 +73,8 @@ const AppSidebar = () => {
           ></path>
         </svg>
       ),
-      name: "Feedback Management",
-      path: route("dashboard"),
+      name: "Feedback Reviews",
+      path: route("feedback.index"),
     },
     // {
     //   icon: (

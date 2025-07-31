@@ -3,6 +3,7 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CredentialController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -23,6 +24,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{course}', [CourseController::class, 'show'])->name('show');
         Route::put('/{course}', [CourseController::class, 'update'])->name('update');
         Route::delete('/{course}', [CourseController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('feedback')->name('feedback.')->group(function () {
+        Route::get('/', [FeedbackController::class, 'index'])->name('index');
+        Route::get('/{feedback}', [FeedbackController::class, 'show'])->name('show');
+        Route::put('/{feedback}', [FeedbackController::class, 'update'])->name('update');
+        Route::delete('/{feedback}', [FeedbackController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('profile')->name('profile.')->group(function () {

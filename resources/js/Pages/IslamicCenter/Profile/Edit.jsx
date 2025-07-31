@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "@inertiajs/react";
-import DropzoneImageEdit from "@/Components/DropzoneImageEdit";
-import DropzoneVideoEdit from "@/Components/DropzoneVideoEdit";
+import DropzoneImageProfile from "@/Components/DropzoneImageProfile";
+import DropzoneVideoProfile from "@/Components/DropzoneVideoProfile";
 import { showUpdateAlert } from "@/Components/common/UpdateAlert";
 
 export default function EditProfileModal({ onClose, profile, role, baseUrl }) {
@@ -307,7 +307,7 @@ export default function EditProfileModal({ onClose, profile, role, baseUrl }) {
             </h3>
             <div className="space-y-6">
               <div>
-                <DropzoneImageEdit
+                <DropzoneImageProfile
                   data={data}
                   setData={setData}
                   errors={errors}
@@ -317,7 +317,7 @@ export default function EditProfileModal({ onClose, profile, role, baseUrl }) {
               </div>
 
               <div>
-                <DropzoneVideoEdit
+                <DropzoneVideoProfile
                   data={data}
                   setData={setData}
                   error={errors.video}

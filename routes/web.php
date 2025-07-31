@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{feedback}', [FeedbackController::class, 'show'])->name('show');
         Route::put('/{feedback}', [FeedbackController::class, 'update'])->name('update');
         Route::delete('/{feedback}', [FeedbackController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('support')->name('support.')->group(function () {
+        Route::post('/', [SupportController::class, 'store'])->name('store');
     });
 
     Route::prefix('profile')->name('profile.')->group(function () {

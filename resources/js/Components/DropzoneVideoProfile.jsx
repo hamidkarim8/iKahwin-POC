@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export default function DropzoneVideoEdit({
+export default function DropzoneVideoProfile({
   data,
   setData,
   error,
@@ -19,10 +19,17 @@ export default function DropzoneVideoEdit({
       setVideoPreview(videoPath);
       setFilename(existingVideo.video_path.split("/").pop());
     }
-  }, [existingVideo, baseUrl]);
+  }, [existingVideo, baseUrl, data.video, data.delete_video]);
 
   const handleFile = (file) => {
     if (!file) return;
+    
+    // Check file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Video file size must be less than 10MB.");
+      return;
+    }
+
     setData("delete_video", false);
     setData("video", file);
     setVideoPreview(URL.createObjectURL(file));
@@ -47,8 +54,8 @@ export default function DropzoneVideoEdit({
   };
 
   return (
-    <div className="mt-6">
-      <label className="label">Upload Video (optional, max. 1)</label>
+    <div>
+      <label className="label">Profile Video (optional, max. 1, 10MB limit)</label>
       <div
         onClick={handleClick}
         onDragOver={(e) => e.preventDefault()}
@@ -74,11 +81,15 @@ export default function DropzoneVideoEdit({
 
       {videoPreview && (
         <div className="mt-4 relative">
-          <video src={videoPreview} controls className="w-full rounded mb-2" />
+          <video 
+            src={videoPreview} 
+            controls 
+            className="w-full rounded mb-2 mx-auto" 
+          />
           <button
             type="button"
             onClick={removeVideo}
-            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center"
+            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center hover:bg-red-600"
             title="Remove"
           >
             ✕
@@ -88,6 +99,12 @@ export default function DropzoneVideoEdit({
           </p>
         </div>
       )}
+
+      {!videoPreview && (
+        <div className="mt-4 text-center text-gray-500 dark:text-gray-400">
+          <p className="text-sm">No video uploaded yet</p>
+        </div>
+      )}
     </div>
   );
-}
+} 

@@ -1,10 +1,13 @@
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
+import { SupportModalProvider, useSupportModal } from "../context/SupportModalContext";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
+import SupportModal from "../Components/SupportModal";
 
 const LayoutContent = ({ children }) => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const { isSupportModalOpen, closeSupportModal } = useSupportModal();
   console.log("Rendering AppLayout");
 
   return (
@@ -23,15 +26,23 @@ const LayoutContent = ({ children }) => {
           {children}
         </div>
       </div>
+      
+      {/* Support Modal - rendered at body level */}
+      <SupportModal 
+        isOpen={isSupportModalOpen} 
+        onClose={closeSupportModal} 
+      />
     </div>
   );
 };
 
 const AppLayout = ({ children }) => {
   return (
-    <SidebarProvider>
-      <LayoutContent>{children}</LayoutContent>
-    </SidebarProvider>
+    <SupportModalProvider>
+      <SidebarProvider>
+        <LayoutContent>{children}</LayoutContent>
+      </SidebarProvider>
+    </SupportModalProvider>
   );
 };
 

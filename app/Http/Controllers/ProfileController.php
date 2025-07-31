@@ -52,16 +52,6 @@ class ProfileController extends Controller
             $remainingImages = $existingProfile->images()->count();
         }
 
-        // Debug: Log what's being sent
-        Log::info('Profile Store Request', [
-            'hasExistingProfile' => $existingProfile ? true : false,
-            'hasExistingImages' => $hasExistingImages,
-            'remainingImages' => $remainingImages,
-            'deleted_images' => $request->deleted_images,
-            'images' => $request->has('images') ? count($request->file('images', [])) : 'not set',
-            'hasFiles' => $request->hasFile('images'),
-        ]);
-
         $request->validate([
             'role' => 'required|string',
             'vendor_name' => 'required|string|max:255',
@@ -256,6 +246,12 @@ class ProfileController extends Controller
         if ($request->hasFile('video')) {
             $video = $request->file('video');
             $path = $video->store('profiles/profile_videos', 'public');
+
+            // Delete existing video if any
+            if ($profile->video) {
+                Storage::disk('public')->delete($profile->video->video_path);
+                $profile->video->delete();
+            }
 
             ProfileVideo::create([
                 'profile_id' => $profile->id,

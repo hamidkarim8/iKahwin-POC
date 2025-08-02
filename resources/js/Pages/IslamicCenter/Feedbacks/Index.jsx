@@ -9,7 +9,7 @@ export default function Index({ feedbacks, baseUrl }) {
   const handleStatusToggle = (feedback) => {
     const newStatus = feedback.status === 'display' ? 'no_display' : 'display';
     
-    router.put(route('feedback.update', feedback.id), {
+    router.post(route('feedback.update', feedback.id), {
       status: newStatus
     });
   };

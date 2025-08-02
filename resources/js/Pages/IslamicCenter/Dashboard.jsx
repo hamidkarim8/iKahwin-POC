@@ -313,7 +313,7 @@ export default function Dashboard({ auth, totalCourses, totalFeedbacks = 0, cour
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 text-sm font-medium">Total Courses</p>
-                <p className="text-3xl font-bold">{totalCourses || 12}</p>
+                <p className="text-3xl font-bold">{totalCourses || 0}</p>
                 <p className="text-blue-100 text-sm mt-1">{coursesDifference} from last month</p>
               </div>
               <Calendar className="w-12 h-12 text-blue-200" />

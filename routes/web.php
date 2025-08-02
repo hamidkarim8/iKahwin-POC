@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('feedback')->name('feedback.')->group(function () {
         Route::get('/', [FeedbackController::class, 'index'])->name('index');
         Route::get('/{feedback}', [FeedbackController::class, 'show'])->name('show');
-        Route::post('/{feedback}', [FeedbackController::class, 'update'])->name('update');
+        Route::put('/{feedback}', [FeedbackController::class, 'update'])->name('update');
         Route::delete('/{feedback}', [FeedbackController::class, 'destroy'])->name('destroy');
     });
 
